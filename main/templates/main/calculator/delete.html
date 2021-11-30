@@ -1,0 +1,6 @@
+<h1>Delete</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>Delete calculator {{ calculator }}?</p>
+    <input type="submit" value="Delete">
+</form>

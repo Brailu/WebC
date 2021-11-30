@@ -1,6 +1,9 @@
-<h1>Calculators</h1>
+<h1>List</h1>
+<p><a href="{% url 'calculator_create' %}">Create</a></p>
+<ul>
 {% for calculator in calculators %}
-  <p>{{ calculator }}</p>
+    <li><a href="{% url 'calculator_detail' calculator.id %}">{{ calculator }}</a></li>
 {% empty %}
-  <p>Sorry, no calculators</p>
+    <li>Sorry, no calculators</li>
 {% endfor %}
+</ul>

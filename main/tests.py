@@ -26,3 +26,15 @@ class CalculatorModelTest(TestCase):
     def test_to_str(self):
         calculator = Calculator(name="test")
         self.assertEqual(str(calculator), "test")
+
+class CalculatorListViewTest(TestCase):
+
+    def setUp(self):
+        self.calculator = Calculator.objects.create(name="test")
+
+    def test_render_list(self):
+        response = self.client.get("/calculator/")
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(response.context["calculators"], ["<Calculator: test>"])
+        self.assertTemplateUsed(response, "main/calculator/list.html")
+

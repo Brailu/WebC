@@ -1,0 +1,6 @@
+<h1>Calculators</h1>
+{% for calculator in calculators %}
+  <p>{{ calculator }}</p>
+{% empty %}
+  <p>Sorry, no calculators</p>
+{% endfor %}

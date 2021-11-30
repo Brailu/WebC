@@ -4,9 +4,11 @@ from main.views import CalculatorDetailView
 from main.views import CalculatorCreateView
 from main.views import CalculatorUpdateView
 from main.views import CalculatorDeleteView
+from main.views import HomeView
 
 
 urlpatterns = [
+    path("", HomeView.as_view(), name="home"),
     path("calculator/", CalculatorListView.as_view(), name="calculator_list"),
     path("calculator/create/", CalculatorCreateView.as_view(), name="calculator_create"),
     path("calculator/<int:id>/", CalculatorDetailView.as_view(), name="calculator_detail"),

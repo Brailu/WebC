@@ -83,3 +83,8 @@ class CalculatorDeleteView(View):
             return redirect("/calculator/")
         except Calculator.DoesNotExist:
             raise Http404()
+
+class HomeView(View):
+
+    def get(self, request):
+        return render(request, "main/home.html")

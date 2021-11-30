@@ -140,4 +140,11 @@ class CalculatorDeleteViewTest(TestCase):
         response = self.client.post(f"/calculator/{self.calculator.id}/delete/")
         self.assertRedirects(response, "/calculator/")
         with self.assertRaises(Calculator.DoesNotExist):
-            Calculator.objects.get(name="test"
+            Calculator.objects.get(name="test")
+
+class HomeViewTest(TestCase):
+
+    def test_render(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "main/home.html")

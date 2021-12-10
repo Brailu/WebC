@@ -6,7 +6,7 @@ class Calculator(models.Model):
     name = models.CharField(
         "name",
         max_length=32,
-        # unique=True
+        unique=True
     )
 
     def __str__(self):

@@ -17,7 +17,7 @@ response = client.create_container_service_deployment(
     serviceName="webc",
     containers={
         "webc": {
-            "image": "brunitto/webc:latest",
+            "image": "brailu/webc:latest",
             "environment": {
                 "DJANGO_SETTINGS_MODULE": os.environ["DJANGO_SETTINGS_MODULE"],
                 "SECRET_KEY": os.environ["SECRET_KEY"]

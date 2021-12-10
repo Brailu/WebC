@@ -22,12 +22,12 @@ jobs:
         run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
 
       - name: publish
-        run: docker push brunitto/webc:latest
+        run: docker push brailu/webc:latest
 
   deploy:
     needs: delivery
     runs-on: ubuntu-latest
-    container: brunitto/pipenv:latest
+    container: brailu/pipenv:latest
 
     steps:
 

@@ -1,8 +1,14 @@
+
+
 from django.http.response import Http404, HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.views import View
 from main.models import Calculator
 from main.forms import CalculatorForm
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CalculatorListView(View):
@@ -40,6 +46,16 @@ class CalculatorCreateView(View):
             context = {"form": form}
             return render(request, "main/calculator/create.html", context)
 
+    def post(self, request):
+        form = CalculatorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            logger.info(f"Calculator \"{form.instance.name}\" saved!")
+            return redirect("/calculator/")
+        else:
+            context = {"form": form}
+            return render(request, "main/calculator/create.html", context)
+
 
 class CalculatorUpdateView(View):
 
@@ -58,6 +74,20 @@ class CalculatorUpdateView(View):
             form = CalculatorForm(request.POST, instance=calculator)
             if form.is_valid():
                 form.save()
+                return redirect(f"/calculator/{id}/")
+            else:
+                context = {"form": form}
+                return render(request, "main/calculator/create.html", context)
+        except Calculator.DoesNotExist:
+            raise Http404()
+    
+    def post(self, request, id):
+        try:
+            calculator = Calculator.objects.get(id=id)
+            form = CalculatorForm(request.POST, instance=calculator)
+            if form.is_valid():
+                form.save()
+                logger.info(f"Calculator \"{form.instance.name}\" updated!")
                 return redirect(f"/calculator/{id}/")
             else:
                 context = {"form": form}
@@ -83,6 +113,16 @@ class CalculatorDeleteView(View):
             return redirect("/calculator/")
         except Calculator.DoesNotExist:
             raise Http404()
+    
+    def post(self, request, id):
+        try:
+            calculator = Calculator.objects.get(id=id)
+            calculator.delete()
+            logger.info(f"Calculator \"{calculator.name}\" deleted!")
+            return redirect("/calculator/")
+        except Calculator.DoesNotExist:
+            raise Http404()
+
 
 class HomeView(View):
 

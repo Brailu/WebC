@@ -1,0 +1,31 @@
+name: ci
+on:
+  push:
+    branches:
+      - lesson14-ci
+
+jobs:
+
+  default:
+    runs-on: ubuntu-latest
+    container: brunitto/pipenv:latest
+
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: pipenv install --dev
+
+      - name: check
+        run: pipenv run python3 manage.py check
+      
+      - name: migrate
+        run: pipenv run python3 manage.py migrate
+
+      - name: coverage test
+        run: pipenv run coverage run --include='main/*' manage.py test
+
+      - name: coverage report
+        run: pipenv run coverage report --include='main/*' --show-missing

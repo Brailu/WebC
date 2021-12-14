@@ -1,0 +1,47 @@
+name: cd
+on:
+  push:
+    branches:
+      - lesson14-cd
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    container: docker:latest # docker in docker
+
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: docker build -t brunitto/webc:latest .
+
+      - name: login
+        run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: publish
+        run: docker push brailu/webc:latest
+
+  deploy:
+    needs: delivery
+    runs-on: ubuntu-latest
+    container: brailu/pipenv:latest
+
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: pipenv install
+
+      - name: deploy
+        env:
+          AWS_DEFAULT_REGION: us-east-2
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DJANGO_SETTINGS_MODULE: core.settings_lightsail
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: pipenv run python3 scripts/deploy.py
